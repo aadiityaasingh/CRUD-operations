@@ -1,4 +1,4 @@
-# CRUD-operations
+# Auth-only-app
 
 🔐 Authentication System (JWT + Cookies)
 
