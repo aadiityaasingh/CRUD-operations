@@ -1,6 +1,6 @@
 const userModel = require("../models/user.model.js");
 const jwt = require("jsonwebtoken");
-const emailVerify = require("../middlewares/emailVerify.middleware.js");
+const emailVerify = require("../services/email.service.js");
 
 async function verifyEmailOtp(req, res) {
   try {
