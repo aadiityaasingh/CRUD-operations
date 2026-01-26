@@ -1,7 +1,7 @@
 const userModel = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const emailVerify = require("../middlewares/emailVerify.middleware.js")
+const emailVerify = require("../services/email.service.js");
 
 async function registerUser(req, res) {
   try {
