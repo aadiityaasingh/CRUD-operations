@@ -1,59 +1,80 @@
-# Auth-only-app
+# 🔐 Auth System with Email OTP Verification (Node.js + JWT)
 
-🔐 Authentication System (JWT + Cookies)
-
-This project implements a production-style authentication system using JWT, HTTP-only cookies, and proper auth separation.
-No frontend tricks. No localStorage nonsense. No magic libraries doing thinking for you.
-
+A secure backend authentication system built with Node.js, Express, MongoDB, JWT, HTTP-only cookies, and Email OTP verification.
 
 🚀 Features
-Core Auth
-User Signup
+
+🔑 Core Authentication:
+User Registration
+Email OTP Verification (6-digit code)
 User Login
 Logout
 Protected Routes
 
-Security
-Password hashing using bcrypt
+📧 Email System:
+OTP sent during registration
+OTP expires after 10 minutes
+Welcome email sent after successful verification
+
+🔒 Security Features:
+Password hashing with bcrypt
 JWT-based authentication
-Access Token + Refresh Token flow
 Tokens stored in HTTP-only cookies
+Email ownership verification required before login
+OTP expiry system
+Protection against XSS token theft
+Basic CSRF mitigation using sameSite cookies
 
+Authentication Flow
+1️⃣ Registration:-
 
-🧩 Auth Flow:-
-1️⃣ Signup
+User submits:
+Name
+Email
+Password
 
-User submits email + password
-Password is hashed using bcrypt
-User is stored in DB with hashed password only
+Server actions:
+Checks if user already exists
+Hashes password using bcrypt
+Generates 6-digit OTP
+Stores OTP + expiry time in DB
+Sends OTP to user’s email
+⚠️ User is NOT logged in yet
 
-2️⃣ Login
+2️⃣ Email Verification (OTP):-
+User submits:
+Email
+6-digit OTP
+Server verifies:
+OTP matches
+OTP is not expired
 
-User submits credentials
-Password is verified with bcrypt
-Server generates:
-Access Token 
-Refresh Token
-Tokens are sent via HTTP-only cookies
-Tokens are NOT stored in localStorage
-JavaScript CANNOT access them
-XSS risk reduced by design
+If valid:
+isVerified → set to true
+OTP fields cleared
+Welcome email sent
 
-3️⃣ Accessing Protected Routes
+User is logged in (JWT cookie issued)
 
-Client makes request
-Browser automatically sends cookies
+3️⃣ Login:-
+User submits:
+Email
+Password
+Server checks:
+User exists
+Password matches
+Email is verified ✅
 
+If all pass:
+JWT token generated
+Token stored in HTTP-only cookie
 
-4️⃣ Token Refresh
+4️⃣ Accessing Protected Routes:-
+When a logged-in user makes a request:
+Browser automatically sends the JWT cookie
+Auth middleware verifies the token
+If valid → access granted
+If invalid/expired → access denied
 
-If access token expires:
-Refresh token is verified
-New access token is issued
-No re-login required
-
-5️⃣ Logout
-
-Server clears auth cookies
-Tokens become useless
-Session is effectively terminated
+5️⃣ Logout:-
+Server clears the authentication cookie:
